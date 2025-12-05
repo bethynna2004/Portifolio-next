@@ -3,11 +3,15 @@
 export default function Home() {
   return (
     <>
-    <main className="text-2xl font-bold mb-140">
-     <div className="mt-4 mx-10 ml-4 w-2xl h-200 justify-center-safe bg-gray-500 ">
-       <h1 >Welcome to My Portfolio</h1>
+
+    
+    
+     
+     <div className="text-2xl font-bold mb-140 bg-gradient-to-r from-blue-500 via-black to-blue-700 h-400 w-500 justify-center-safe flex items-center">
+       <h1 className="te">Welcome to My Portfolio</h1>
+  
      </div>
-    </main>
+    
     </>
       
   );
