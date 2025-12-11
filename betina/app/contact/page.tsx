@@ -1,39 +1,116 @@
-export default function ContactsPage  ()  {
-    return(
-        <>
-        <div className=" bg-gradient-to-r from-black to-blue-700 h-400 w-500  justify-center-safe text-2xl font-bold">
+"use client"
 
-        <div className="w-100 h-150  bg-gray-500  m-0 p-10 outline-4 outline-black rounded-lg flex justify-around flex-col ">
-            <h1 className="flex justify-center">Contacte-me</h1>
-            <form action="" >
-                <label htmlFor="name">Nome:</label><br />
-                <input className="rounded-lg  outline-2 outline-black" type="text" id="name" name="name" required  placeholder="Nome"/>
-                <br />
-                <label htmlFor="name">Email:</label><br />
-                <input className="rounded-lg  outline-2 outline-black" type="text" id="name" name="name" required  placeholder="Email"/>
-                <br />
-                <label htmlFor="name">Contacto:</label><br />
-                <input className="rounded-lg outline-2 outline-black" type="text" id="name" name="name" required  placeholder="Contacto"/>
-                <br />
-                
-                <label htmlFor="message">Mensagem:</label><br />
-                <textarea className="rounded-lg outline-2 outline-black" id="message" name="message" required placeholder="Escreva sua mensagem aqui"></textarea>
-                <br />
-                <button className="bg-blue-800 text-white p-2 rounded-lg hover:bg-blue-600 mt-4" type="submit">Submeter</button>
-                
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
-            </form>
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"   // <-- IMPORT NECESSÁRIO
 
+const formSchema = z.object({
+  name: z.string().min(2, { message: "O nome é obrigatório" }),
+  email: z.string().email({ message: "E-mail inválido" }),
+  message: z.string().min(10, { message: "A mensagem deve ter no mínimo 10 caracteres" }),
+  contact: z.string().min(1, { message: "O contato deve ter no mínimo 1 caractere" }).max(9)
+})
 
+export  default function ProfileForm() {
 
-        </div>
-        
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+      contact: "",
+    },
+  })
 
-        </div>
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log("SUBMETEU!")
+    console.log(values)
+    alert("Formulário enviado! Veja no console.")
+  }
 
+  return (
+   <div className="p-8 bg-gradient-to-r from-blue-950 to-blue-300 h-200 w-full text-white ">
+    <div className="max-w-md mx-auto"  >
+       <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
 
+        {/* NAME */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Nome</FormLabel>
+              <FormControl>
+                <Input placeholder="Seu nome" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      </>
-    )
+        {/* EMAIL */}
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>E-mail</FormLabel>
+              <FormControl>
+                <Input placeholder="Seu e-mail" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* CONTACT */}
+        <FormField
+          control={form.control}
+          name="contact"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Contato</FormLabel>
+              <FormControl>
+                <Input placeholder="Telefone ou celular" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* MESSAGE — textarea */}
+        <FormField
+          control={form.control}
+          name="message"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mensagem</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Escreva sua mensagem..." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit">Enviar</Button>
+      </form>
+    </Form>
+    </div>
+   </div>
+  )
 }
- 
